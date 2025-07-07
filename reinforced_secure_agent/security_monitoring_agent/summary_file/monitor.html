@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>공격 로그 + 대응책 모니터링</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f8f9fa;
+      padding: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .threat {
+      border-left: 6px solid #dc3545;
+    }
+    .response {
+      border-left: 6px solid #28a745;
+    }
+    .card h3 {
+      margin-top: 0;
+    }
+    .card pre {
+      white-space: pre-wrap;
+      background: #f1f1f1;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 15px;
+      font-family: "Courier New", Consolas, monospace;
+      line-height: 1.6;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>📡 공격 탐지 및 대응 모니터링</h1>
+  <div id="logArea"></div>
+
+  <script>
+    const logArea = document.getElementById('logArea');
+
+    fetch('summary_log.txt')
+      .then(res => res.text())
+      .then(text => {
+        const lines = text.split('\n');
+        const groups = [];
+        let currentGroup = { problems: [], response: '' };
+        let inResponse = false;
+
+        for (let line of lines) {
+          line = line.trim();
+          if (line === '') continue;
+
+          // 대응책 시작
+          if (line.includes('대응책 정리')) {
+            inResponse = true;
+            continue;
+          }
+
+          // 새 그룹 시작 기준 (예: ==== 혹은 --- 요약 시각 등)
+          if (line.startsWith('====') || line.startsWith('---')) {
+            if (currentGroup.problems.length > 0 || currentGroup.response) {
+              groups.push(currentGroup);
+              currentGroup = { problems: [], response: '' };
+            }
+            inResponse = false;
+            continue;
+          }
+
+          if (inResponse) {
+            currentGroup.response += line + '\n';
+          } else {
+            if (line.includes('|') && !line.includes('시간')) {
+              const parts = line.split('|').map(p => p.trim());
+              if (parts.length >= 5) {
+                currentGroup.problems.push({
+                  time: parts[0],
+                  ip: parts[1],
+                  port: parts[2],
+                  type: parts[3],
+                  desc: parts[4]
+                });
+              }
+            }
+          }
+        }
+
+        if (currentGroup.problems.length > 0 || currentGroup.response) {
+          groups.push(currentGroup);
+        }
+
+        // DOM 렌더링
+        groups.forEach((group, idx) => {
+          group.problems.forEach((p, i) => {
+            const div = document.createElement('div');
+            div.className = 'card threat';
+            div.innerHTML = `
+              <h3>🚨 위협: ${p.type}</h3>
+              <p><strong>시간:</strong> ${p.time}</p>
+              <p><strong>IP:</strong> ${p.ip}</p>
+              <p><strong>포트:</strong> ${p.port}</p>
+              <p><strong>설명:</strong> ${p.desc}</p>
+            `;
+            logArea.appendChild(div);
+          });
+
+          if (group.response.trim()) {
+            const div = document.createElement('div');
+            div.className = 'card response';
+            div.innerHTML = `<h3>🛠️ 대응책 (문제 ${idx + 1} 그룹)</h3><pre>${group.response.trim()}</pre>`;
+            logArea.appendChild(div);
+          }
+        });
+      });
+  </script>
+</body>
+</html>
