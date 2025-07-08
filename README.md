@@ -10,9 +10,9 @@
 
 &nbsp;또한, 본 시스템은 단순 룰 기반 보안 체계를 넘어서 Actor–Critic 구조 기반의 적응형 보안 아키텍처를 채택하였으며, 과거 강화학습 기반 유체 제어 연구에서의 구조적 설계를 참조하여 실시간 학습 및 강화가 가능하도록 구현하였습니다.
 
- &nbsp;전체 시스템은 Reverse Proxy – Secure Gateway – LLM Agent – Monitoring Agent 간의 트래픽 흐름 속에서 동작하며, 실시간 판단과 사후 대응의 연계를 통해 실제 서비스 환경에서도 효과적인 보안 방어 기능을 제공할 수 있도록 설계되었습니다.
+&nbsp;전체 시스템은 Reverse Proxy – Secure Gateway – LLM Agent – Monitoring Agent 간의 트래픽 흐름 속에서 동작하며, 실시간 판단과 사후 대응의 연계를 통해 실제 서비스 환경에서도 효과적인 보안 방어 기능을 제공할 수 있도록 설계되었습니다.
 
-### 목표 및 기대효과 <br>
+### 목표 및 기대효과
 -  &nbsp;기존 보안 체계가 탐지하기 어려운 복합 인코딩, Shell Injection, 시스템 우회형 공격에 대한 정밀 탐지
 
 - ReAct 기반 문맥 분석 구조를 통한 공격 의도 파악
@@ -24,3 +24,38 @@
 - 향후 상용 API 형태의 보안 게이트웨이 플랫폼으로 확장 가능성
 
 
+<br>
+
+### Architecture & Data Flow Simulation 
+
+<br>
+
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/3b88619e-50a0-4bff-99a4-d1733d2ea89e" alt="Image" width="600px" />
+  <p style="text-align: center;"><em>Figure 1. Secure Gateway와 Secure Log Monitoring 간의 데이터 흐름 관계도</em></p>
+</div>
+
+<br>
+
+1. <b>Encrypted Request 수신</b> <br>
+&nbsp; - 클라이언트로부터 TLS 기반 암호화된 요청 수신, 민감 정보 노출 위험은 낮음.
+
+2. <b>Filtered Request 처리</b> <br>
+&nbsp; - Secure Gateway가 위험 여부 판단 후 안전한 요청만 Nginx로 전달, 로그는 실시간 수집됨.
+
+3. <b>Polling 메커니즘</b> <br>
+&nbsp; - Monitoring Agent가 Queue에서 실시간 로그 데이터를 수집(polling), 기본 1000건 단위 처리.
+
+4. <b>Blacklist 등록</b> <br>
+&nbsp; - 분석 결과 위험 IP는 자동으로 Secure Gateway의 Blacklist에 등록되어 차단됨.
+
+5. <b>Few-shot 기반 피드백</b> <br>
+&nbsp; - 사후 악성 판별 요청은 Few-shot 예시로 Vector DB에 저장, 향후 유사 공격 탐지에 활용됨.
+
+<br>
+
+해당 레포지토리에는 총 3개의 패키지가 포함되어 있습니다:
+
+```message.queue``` – 로그 전달(Message Queue)용 모듈
+
+```reinforced_secure_agent``` – Secure Gateway Agent 및 Secure Monitoring Agent 기능 담당
