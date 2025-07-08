@@ -99,7 +99,7 @@
 <br>
 
 
-#### <b>1. Qdrant Vector Database 설치 방법</b>
+### <b>1. Qdrant Vector Database 설치 방법</b>
 
 &nbsp;  Docker Desktop 환경에서 다음 명령어를 통해 Qdrant를 설치할 수 있습니다 (Linux상에서는 Docker 설치후 바로 실행 가능):
 
@@ -113,7 +113,7 @@ docker run -d --name qdrant -p 6333:6333 -v qdrant_data:/qdrant/storage qdrant/q
 
 <br>
 
-#### 2. Message Queue 사용 방법
+### 2. Message Queue 사용 방법
 
 &nbsp; 일반적으로 프로덕션 환경에서는 Logstash, FileBeat, Kafka 등 검증된 로그 파이프라인 도구를 활용하여 로그 수집 및 전송을 수행합니다. 하지만 이번 프로젝트에서는 Spring Boot 기반으로 직접 개발한 경량 Message Queue를 사용하였습니다. 해당 Message Queue는 Yaml 설정 파일에서 특정 디렉터리를 지정하면, 해당 경로 내의 .log 및 .gz 파일을 자동으로 읽어 큐에 적재합니다. ```.gz``` 파일은 초기 한 번 전체를 읽고, ```.log``` 파일은 tail 방식으로 실시간으로 신규 로그를 감시하며 큐에 전달합니다.
 
@@ -147,7 +147,7 @@ log:
 
 <br>
 
-#### 3. Secure Gateway Agent 사용 방법
+### 3. Secure Gateway Agent 사용 방법
 
 &nbsp; 1. Python 버전: 3.11.9 
 
@@ -164,8 +164,9 @@ PATH 환경변수를 설정한 상태라면, 별도의 uvicorn 명령 없이도 
 
 <br>
 
-<b>API Gateway 기능</b> <br>
-&nbsp;  본 Gateway는 Black List / White List 관리 기능을 포함하며, POST 요청을 통해 설정하고, GET 요청을 통해 확인할 수 있습니다. 라우팅 기능 또한 포함되어 있으나, 현재는 테스트 목적으로 비워두었습니다. 필요 시, 수동으로 원하는 주소를 다음 함수의 인자로 지정해 사용할 수 있습니다:
+🔐 <b>API Gateway 기능</b> <br>
+
+&nbsp;  본 Gateway는 Black List / White List 관리 기능을 포함하며, POST 요청을 통해 설정하고, GET 요청을 통해 확인할 수 있습니다. 라우팅 기능 또한 포함되어 있으나, 현재는 테스트 목적으로 비워두었습니다. 필요 시, 수동으로 원하는 주소를 다음 함수의 인자로 지정해 사용할 수 있습니다.
 
 ``` pytohn
 # main.py내부
@@ -196,6 +197,54 @@ GET http://localhost:8000/gateway/blacklist
 
 <br>
 
-#### 4. Secure Monitoring Agent 사용 방법
+### 4. Secure Monitoring Agent 사용 방법
+
+&nbsp; 1. Python 버전: 3.11.9 
+
+&nbsp; 2. 필수 조건: 
+- Vector DB가 사전에 실행되어 있어야 합니다.
+- Gateway가 실행 중이어야 합니다. (실행되지 않더라도 Monitoring 자체는 기동 가능하지만, Blacklist 추가 등의 기능은 제한됩니다.)
+
+<br>
+
+```main.py``` 내부에는 무한 루프 기반의 모니터링 시스템이 포함되어 있습니다.
+
+안전하고 안정적인 실행을 위해 아래 두 가지 방식 중 선택적으로 실행하실 수 있습니다
+
+```bash
+# 일반적인 Python 실행 방식
+python main.py
+
+# Uvicorn ASGI 서버 실행 권장 방식
+uvicorn main:app --port 8001
+```
+
+<br>
+
+📂 Summary 파일 및 시각화 <br>
+
+&nbsp; ```summary_file``` 디렉토리 내에 ```monitor.html``` 파일이 포함되어 있습니다. 이 HTML 파일은 모니터링 에이전트가 실행되며 생성한 ```summary_log.txt```를 기반으로 시각화된 결과를 보여줍니다.
+요약 및 분석된 로그 데이터는 자동으로 ```summary_log.txt```에 저장됩니다.
+
+<br>
+
+📡 Monitoring System 개요 <br>
+
+&nbsp; 본 시스템은 실시간 보안 이벤트를 모니터링하기 위해 Stream 방식으로 설계되었습니다.
+```로그 수집 → 분석 → 요약 → 시각화```의 파이프라인을 통해 보안 위협 흐름을 직관적으로 확인할 수 있습니다.
 
 
+<br>
+
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/b11f0aeb-0c86-432e-a411-30a0573d411b" alt="Image" width="1200px" />
+  <p style="text-align: center;"><em>Figure 2. Monitoring System Console 동작 화면</em></p>
+</div>
+
+<br>
+
+&nbsp; 위의 GIF는 실제 Monitoring Agent가 콘솔 창에서 실행되는 모습을 보여줍니다. 해당 화면에서는 <b>메시지 메모리 관리</b> 현황도 함께 모니터링되며, ```SystemMessage```, ```HumanMessage```, ```ToolMessage```, ```AIMessage``` 등의 메시지 유형별로 상태를 확인할 수 있습니다. Monitoring Agent는 ```pre_model_hook``` 노드에서 메시지를 토큰 기준으로 트리밍하여 처리합니다.
+
+
+
+<br>
