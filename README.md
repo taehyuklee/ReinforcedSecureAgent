@@ -148,3 +148,54 @@ log:
 <br>
 
 #### 3. Secure Gateway Agent 사용 방법
+
+&nbsp; 1. Python 버전: 3.11.9 
+
+&nbsp; 2. 필수 조건: Vector DB가 사전에 실행되어 있어야 함
+
+<br>
+
+```main.py``` 내부에 uvicorn 실행 코드가 포함되어 있으므로, 아래와 같이 실행 가능합니다. 
+
+``` bash
+python main.py
+```
+PATH 환경변수를 설정한 상태라면, 별도의 uvicorn 명령 없이도 위와 같이 바로 실행됩니다.
+
+<br>
+
+<b>API Gateway 기능</b> <br>
+&nbsp;  본 Gateway는 Black List / White List 관리 기능을 포함하며, POST 요청을 통해 설정하고, GET 요청을 통해 확인할 수 있습니다. 라우팅 기능 또한 포함되어 있으나, 현재는 테스트 목적으로 비워두었습니다. 필요 시, 수동으로 원하는 주소를 다음 함수의 인자로 지정해 사용할 수 있습니다:
+
+``` pytohn
+# main.py내부
+routing_url(request, "http://routing_ip/path", request_body)
+```
+&nbsp; 실제 API Gateway처럼 도메인 기반 라우팅을 처리하려면 별도의 router 구성 또는 도메인 관리 모듈이 필요하지만, 본 프로젝트의 핵심 목적은 아니므로 해당 기능은 구현되어 있지 않습니다.
+
+<br>
+
+1. <b>Black List IP 추가</b> : 주로 Monitoring Agent가 자동으로 위협 판단 시 호출하는 API입니다.
+``` http
+POST http://localhost:8000/gateway/blacklist
+Content-Type: application/json
+
+{
+  "ipList": [
+    "https://www.good_url/shot",
+    "https://www.great_url/hot",
+    "https://www.taylee.link/analysis/t-test"
+  ]
+}
+``` 
+
+2. <b>현재 Black List 조회</b> : 운영자나 사람이 직접 확인하는 용도로 사용됩니다.
+``` http
+GET http://localhost:8000/gateway/blacklist
+```
+
+<br>
+
+#### 4. Secure Monitoring Agent 사용 방법
+
+
