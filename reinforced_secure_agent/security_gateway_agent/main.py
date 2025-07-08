@@ -36,7 +36,7 @@ def get_few_shot_from_db(str_full_context: str):
     retriever = retriever_node().as_retriever(
         search_kwargs={
             "k": 3,  # 여러 개 받아서 confidence 기반 판단 가능
-            "score_threshold": 0.8
+            # "score_threshold": 0.5
             # "search_params": {
             #     "hnsw_ef": 32,  # 기본 64 ~ 128 / 낮추면 속도↑ 정확도↓
             #     "exact": False  # True는 느리지만 완전 탐색 (쓰지 않는게 좋음)
