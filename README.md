@@ -12,6 +12,8 @@
 
 &nbsp;전체 시스템은 Reverse Proxy – Secure Gateway – LLM Agent – Monitoring Agent 간의 트래픽 흐름 속에서 동작하며, 실시간 판단과 사후 대응의 연계를 통해 실제 서비스 환경에서도 효과적인 보안 방어 기능을 제공할 수 있도록 설계되었습니다.
 
+<br>
+
 ### 목표 및 기대효과
 -  &nbsp;기존 보안 체계가 탐지하기 어려운 복합 인코딩, Shell Injection, 시스템 우회형 공격에 대한 정밀 탐지
 
@@ -102,6 +104,8 @@ docker run -d --name qdrant -p 6333:6333 -v qdrant_data:/qdrant/storage qdrant/q
 ```
 
 &nbsp; 컨테이너는 경량화된 프로세스로 동작하며, 데이터를 저장할 별도의 스토리지(볼륨)를 마운트해야 합니다. 또한, Docker 내부의 가상 네트워크 및 MAC 주소와 호스트 OS의 포트를 연결하여 실행하는 구조입니다. 위 명령어는 이 과정을 모두 반영한 실행 명령입니다. 저는 Qdrant UI 설치 및 사용은 다음 사이트를 참고했습니다. <a href="https://github.com/qdrant/qdrant-web-ui" target="_blank" rel="noopener noreferrer">Qdrant GitHub UI</a>
+
+<br>
 
 #### 2. Message Queue 사용 방법
 
