@@ -93,7 +93,13 @@
 
 <br>
 
-#### 1. Qdrant Vector Database 설치 방법
+#### - 시스템 실행 순서 -
+```1. Vector Database (Qdrant) 실행 → 2. Message Queue 서비스 실행 → 3. Secure Gateway Agent 실행 → 4. Secure Monitoring Agent 실행```
+
+<br>
+
+
+#### <b>1. Qdrant Vector Database 설치 방법</b>
 
 &nbsp;  Docker Desktop 환경에서 다음 명령어를 통해 Qdrant를 설치할 수 있습니다 (Linux상에서는 Docker 설치후 바로 실행 가능):
 
@@ -109,5 +115,36 @@ docker run -d --name qdrant -p 6333:6333 -v qdrant_data:/qdrant/storage qdrant/q
 
 #### 2. Message Queue 사용 방법
 
-&nbsp;
+&nbsp; 일반적으로 프로덕션 환경에서는 Logstash, FileBeat, Kafka 등 검증된 로그 파이프라인 도구를 활용하여 로그 수집 및 전송을 수행합니다. 하지만 이번 프로젝트에서는 Spring Boot 기반으로 직접 개발한 경량 Message Queue를 사용하였습니다. 해당 Message Queue는 Yaml 설정 파일에서 특정 디렉터리를 지정하면, 해당 경로 내의 .log 및 .gz 파일을 자동으로 읽어 큐에 적재합니다. ```.gz``` 파일은 초기 한 번 전체를 읽고, ```.log``` 파일은 tail 방식으로 실시간으로 신규 로그를 감시하며 큐에 전달합니다.
 
+아래는 application.yaml 설정 정보입니다.
+
+```yaml
+server:
+  port: 9000
+
+spring:
+  application:
+    name: message.queue
+
+log:
+  dir:
+    path: "your logs directory path"
+```
+```log.dir.path```에 로그 파일이 위치한 디렉터리 경로를 지정하면 됩니다. 이후 Message Queue가 해당 경로를 감시하며 로그 데이터를 수집하여 소비자(Consumer)에게 전달합니다.
+
+<br>
+
+해당 Message Queue에서 제공하는 ```API```는 다음 두 가지입니다:
+
+1. ```GET /new-logs``` <br>
+  최대 max개(기본 100)의 로그 메시지를 한 번에 가져옵니다. (예: /new-logs?max=50)
+
+2. ```GET /queue-size``` <br>
+  현재 큐에 저장된 로그 메시지 수를 조회합니다.
+
+이 API들을 통해 소비자는 실시간으로 적재된 로그를 효율적으로 폴링(polling)하며 처리할 수 있으며, 현재 처리 가능한 메시지 수를 확인하여 적절한 폴링 주기를 조절할 수 있습니다.
+
+<br>
+
+#### 3. Secure Gateway Agent 사용 방법
