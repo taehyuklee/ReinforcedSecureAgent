@@ -33,7 +33,7 @@
 <br>
 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/3b88619e-50a0-4bff-99a4-d1733d2ea89e" alt="Image" width="600px" />
+  <img src="https://github.com/user-attachments/assets/bc7c0988-d230-4df6-8f28-0ae0570965df" alt="Image" width="600px" />
   <p style="text-align: center;"><em>Figure 1. Secure Gateway와 Secure Log Monitoring 간의 데이터 흐름 관계도</em></p>
 </div>
 
@@ -234,6 +234,11 @@ uvicorn main:app --port 8001
 ```로그 수집 → 분석 → 요약 → 시각화```의 파이프라인을 통해 보안 위협 흐름을 직관적으로 확인할 수 있습니다.
 
 
+<br><br>
+
+## Result (결과)
+---
+
 <br>
 
 <div align="center">
@@ -242,19 +247,33 @@ uvicorn main:app --port 8001
 </div>
 
 <br>
+&nbsp; Figure 2는 Monitoring System의 실시간 콘솔 동작 화면으로, Monitoring Agent가 웹 요청을 분석하고 요약하는 과정을 직관적으로 보여줍니다.
 
 &nbsp; 위의 GIF는 실제 Monitoring Agent가 콘솔 창에서 실행되는 모습을 보여줍니다. 해당 화면에서는 <b>메시지 메모리 관리</b> 현황도 함께 모니터링되며, ```SystemMessage```, ```HumanMessage```, ```ToolMessage```, ```AIMessage``` 등의 메시지 유형별로 상태를 확인할 수 있습니다. Monitoring Agent는 ```pre_model_hook``` 노드에서 메시지를 토큰 기준으로 트리밍하여 처리합니다.
 
+<br>
 
-<br><br>
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/9f14b22d-3748-4746-ba28-d604eeea99de" alt="Few-shot Storage Visualization" width="1200px" />
+  <p style="text-align: center;"><em>Figure 3. Few-shot 예제 생성 및 저장 구조 시각화</em></p>
+</div>
 
-## Result (결과)
----
+<br>
 
-Figure 2는 Monitoring System의 실시간 콘솔 동작 화면으로, Monitoring Agent의 분석 및 요약 과정을 시각적으로 보여줍니다.
+&nbsp; Figure 3에서는 Monitoring Agent가 Few-shot 예제를 지정된 형식에 맞게 잘 추가하고 있는지를 시각적으로 확인할 수 있도록 구성하였습니다.
+또한, 각 예제가 요청-응답-사유 구조를 정확히 따르며 높은 생성 정확도를 보이는지도 함께 나타냅니다.
 
-이어서 Figure 3에는 Monitoring Agent가 Few-shot 예제를 지정한 형식에 맞게 잘 추가하고 있는지를 확인할 수 있도록 시각화하였습니다. 또한 해당 예제들이 원하는 형식으로 얼마나 높은 생성 정확도를 보이는지도 함께 나타냅니다.
+&nbsp; 모든 예시가 완벽하게 저장되지는 않으며, 일부는 chunk_size에 따라 잘릴 수 있습니다. 현재 설정된 chunk_size=1000은 가장 합리적인 수준으로 평가되며, chunk_overlap을 적용하지 않은 이유는 예제의 문맥을 Few-shot 단위로 온전히 저장하기 위함입니다. 이때 사용된 분할 도구는 ```RecursiveCharacterTextSplitter```입니다.
 
-Figure 4에서는 summary_log.txt의 일부 내용을 발췌하여, 해당 요약 정보가 monitor.html UI에 정확하게 시각화되고 있는지를 확인할 수 있도록 구성하였습니다.
 
-마지막으로 Figure 5는 BlackList 추가 기능이 정상적으로 작동하고 있는지를 보여주는 예시로, API를 통해 보안 위협 URL/IP가 성공적으로 차단 목록에 반영되는 과정을 나타냅니다.
+<br>
+
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/2a2724e9-6313-4c90-91c8-4d00b8d16527" alt="Image" width="1200px" />
+  <p style="text-align: center;"><em>Figure 4. summary_log.txt를 UI에 표기하는 컨셉</em></p>
+</div>
+
+<br>
+
+&nbsp; Figure 4에서는 summary_log.txt의 일부 내용을 발췌하여, 해당 요약 정보가 monitor.html UI에 정확히 시각화되고 있는지를 보여줍니다.
+Monitoring Agent가 생성한 로그 요약이 실제 인터페이스에서 어떻게 반영되는지를 컨셉을 확인 할 수 있습니다.
