@@ -109,7 +109,20 @@ docker volume create qdrant_data
 docker run -d --name qdrant -p 6333:6333 -v qdrant_data:/qdrant/storage qdrant/qdrant
 ```
 
+<br>
+
 &nbsp; 컨테이너는 경량화된 프로세스로 동작하며, 데이터를 저장할 별도의 스토리지(볼륨)를 마운트해야 합니다. 또한, Docker 내부의 가상 네트워크 및 MAC 주소와 호스트 OS의 포트를 연결하여 실행하는 구조입니다. 위 명령어는 이 과정을 모두 반영한 실행 명령입니다. 저는 Qdrant UI 설치 및 사용은 다음 사이트를 참고했습니다. <a href="https://github.com/qdrant/qdrant-web-ui" target="_blank" rel="noopener noreferrer">Qdrant GitHub UI</a>
+
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/ff582f52-ecc7-422e-ba3c-b5e004de7064" alt="Image" width="450px" />
+  <p style="text-align: center;"><em>참고 Figure. Qdrant UI를 통해 클러스터링 결과 확인 가능</em></p>
+</div>
+
+<br>
+
+&nbsp; UI 설치 후, Vector DB에 벡터화(Embedding)된 데이터를 시각적으로 확인할 수 있습니다. 이를 통해 데이터가 어떻게 클러스터링되어 있는지 등을 직관적으로 파악할 수 있습니다.
+
+
 
 <br>
 
