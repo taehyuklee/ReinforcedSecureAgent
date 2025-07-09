@@ -6,18 +6,6 @@ from langgraph.prebuilt import create_react_agent
 from config.prompts.prompts import build_system_prompt, build_final_secure_prompt
 
 
-from config.tools.acting_tools import *
-from config.tools.summary_tools import *
-from langchain_core.messages.utils import (
-    trim_messages,
-    count_tokens_approximately
-)
-
-from langchain_core.messages import RemoveMessage, HumanMessage, AIMessage, SystemMessage
-from langgraph.graph.message import REMOVE_ALL_MESSAGES
-from langchain_core.messages import ToolMessage
-
-
 summary_prompt = build_final_secure_prompt()
 build_system_prompt = build_system_prompt()
 
@@ -38,6 +26,18 @@ llm = AzureChatOpenAI(
     deployment_name=deployment_name,
     openai_api_version="2024-02-15-preview"
 )
+
+
+from config.tools.acting_tools import *
+from config.tools.summary_tools import *
+from langchain_core.messages.utils import (
+    trim_messages,
+    count_tokens_approximately
+)
+
+from langchain_core.messages import RemoveMessage, HumanMessage, AIMessage, SystemMessage
+from langgraph.graph.message import REMOVE_ALL_MESSAGES
+from langchain_core.messages import ToolMessage
 
 
 def count_message_types(messages):
