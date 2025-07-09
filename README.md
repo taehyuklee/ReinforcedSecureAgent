@@ -283,7 +283,7 @@ Monitoring Agent가 생성한 로그 요약이 실제 인터페이스에서 어�
 <div align="center">
   <img src="https://github.com/user-attachments/assets/e33f3924-fc17-4a93-b6d1-1ff98c2d2ed5" alt="Blacklist" width="1200px" />
   <img src="https://github.com/user-attachments/assets/5e8a4d55-58ea-48cf-afed-43a73b22166a" alt="img" width="1200px">
-  <p style="text-align: center;"><em>igure 5. BlackList 추가 기능 동작 예시</em></p>
+  <p style="text-align: center;"><em>Figure 5. BlackList 추가 기능 동작 예시</em></p>
 </div>
 
 <br>
