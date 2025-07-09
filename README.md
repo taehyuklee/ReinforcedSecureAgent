@@ -261,8 +261,17 @@ uvicorn main:app --port 8001
 
 <br>
 
-&nbsp; Figure 2는 Gateway가 악성 요청을 실시간으로 차단하는 모습을 보여줍니다.  
 
+<br>
+
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/e4b906a2-16cd-4b12-91a4-75a04190b877" alt="gateway" width="1200px" />
+  <p style="text-align: center;"><em>Figure3. Few shot RCE </em></p>
+</div>
+
+<br>
+
+&nbsp; Figure 2는 Gateway가 악성 요청을 실시간으로 차단하는 모습을 보여주고 Figure 3은 few shot을 통해 빠르게 응답하는 Case입니다. <br>
 &nbsp; 간단한 XSS 공격은 LLM 자체에서 1차적으로 차단되며, 인코딩되어 우회된 RCE 등의 고도화된 공격은 `review` 상태로 전환되어 **ReAct Agent**에게 전달됩니다. 이후 ReAct Agent는 다양한 **디코딩 도구(예: base64, ASCII), split 도구**를 활용하여 입력을 분석하고 악성 여부를 판단합니다. 이러한 흐름은 LLM 보안 게이트웨이의 다단계 필터링 로직을 잘 보여주는 대표적인 예시입니다. (영상을 보여주기 위해 Stream으로 표현했습니다)
 
 <br>
@@ -290,11 +299,11 @@ uvicorn main:app --port 8001
 
 <div align="center">
   <img src="https://github.com/user-attachments/assets/b11f0aeb-0c86-432e-a411-30a0573d411b" alt="Image" width="1200px" />
-  <p style="text-align: center;"><em>Figure 3. Monitoring System Console 동작 화면</em></p>
+  <p style="text-align: center;"><em>Figure 4. Monitoring System Console 동작 화면</em></p>
 </div>
 
 <br>
-&nbsp; Figure 3은 Monitoring System의 실시간 콘솔 동작 화면으로, Monitoring Agent가 웹 요청을 분석하고 요약하는 과정을 직관적으로 보여줍니다.
+&nbsp; Figure 4은 Monitoring System의 실시간 콘솔 동작 화면으로, Monitoring Agent가 웹 요청을 분석하고 요약하는 과정을 직관적으로 보여줍니다.
 
 &nbsp; 위의 GIF는 실제 Monitoring Agent가 콘솔 창에서 실행되는 모습을 보여줍니다. 해당 화면에서는 <b>메시지 메모리 관리</b> 현황도 함께 모니터링되며, ```SystemMessage```, ```HumanMessage```, ```ToolMessage```, ```AIMessage``` 등의 메시지 유형별로 상태를 확인할 수 있습니다. Monitoring Agent는 ```pre_model_hook``` 노드에서 메시지를 토큰 기준으로 트리밍하여 처리합니다.
 
@@ -302,12 +311,12 @@ uvicorn main:app --port 8001
 
 <div align="center">
   <img src="https://github.com/user-attachments/assets/9f14b22d-3748-4746-ba28-d604eeea99de" alt="Few-shot Storage Visualization" width="1200px" />
-  <p style="text-align: center;"><em>Figure 4. Few-shot 예제 생성 및 저장 구조 시각화</em></p>
+  <p style="text-align: center;"><em>Figure 5. Few-shot 예제 생성 및 저장 구조 시각화</em></p>
 </div>
 
 <br>
 
-&nbsp; Figure 4에서는 Monitoring Agent가 Few-shot 예제를 지정된 형식에 맞게 잘 추가하고 있는지를 시각적으로 확인할 수 있도록 구성하였습니다.
+&nbsp; Figure 5에서는 Monitoring Agent가 Few-shot 예제를 지정된 형식에 맞게 잘 추가하고 있는지를 시각적으로 확인할 수 있도록 구성하였습니다.
 또한, 각 예제가 요청-응답-사유 구조를 정확히 따르며 높은 생성 정확도를 보이는지도 함께 나타냅니다.
 
 &nbsp; 모든 예시가 완벽하게 저장되지는 않으며, 일부는 chunk_size에 따라 잘릴 수 있습니다. 현재 설정된 chunk_size=1000은 가장 합리적인 수준으로 평가되며, chunk_overlap을 적용하지 않은 이유는 예제의 문맥을 Few-shot 단위로 온전히 저장하기 위함입니다. 이때 사용된 분할 도구는 ```RecursiveCharacterTextSplitter```입니다.
@@ -317,12 +326,12 @@ uvicorn main:app --port 8001
 
 <div align="center">
   <img src="https://github.com/user-attachments/assets/2a2724e9-6313-4c90-91c8-4d00b8d16527" alt="Summary_log" width="1200px" />
-  <p style="text-align: center;"><em>Figure 5. summary_log.txt를 UI에 표기하는 컨셉</em></p>
+  <p style="text-align: center;"><em>Figure 6. summary_log.txt를 UI에 표기하는 컨셉</em></p>
 </div>
 
 <br>
 
-&nbsp; Figure 5에서는 summary_log.txt의 일부 내용을 발췌하여, 해당 요약 정보가 monitor.html UI에 정확히 시각화되고 있는지를 보여줍니다.
+&nbsp; Figure 6에서는 summary_log.txt의 일부 내용을 발췌하여, 해당 요약 정보가 monitor.html UI에 정확히 시각화되고 있는지를 보여줍니다.
 Monitoring Agent가 생성한 로그 요약이 실제 인터페이스에서 어떻게 반영되는지를 컨셉을 확인 할 수 있습니다.
 
 <br>
@@ -330,12 +339,12 @@ Monitoring Agent가 생성한 로그 요약이 실제 인터페이스에서 어�
 <div align="center">
   <img src="https://github.com/user-attachments/assets/e33f3924-fc17-4a93-b6d1-1ff98c2d2ed5" alt="Blacklist" width="1200px" />
   <img src="https://github.com/user-attachments/assets/5e8a4d55-58ea-48cf-afed-43a73b22166a" alt="img" width="1200px">
-  <p style="text-align: center;"><em>Figure 6. BlackList 추가 기능 동작 예시</em></p>
+  <p style="text-align: center;"><em>Figure 7. BlackList 추가 기능 동작 예시</em></p>
 </div>
 
 <br>
 
-&nbsp; Figure 6는 BlackList 추가 기능이 정상적으로 동작하는지를 보여주는 예시입니다.
+&nbsp; Figure 7는 BlackList 추가 기능이 정상적으로 동작하는지를 보여주는 예시입니다.
 API를 통해 특정 URL 또는 IP가 보안 위협으로 판단되어 차단 목록에 성공적으로 반영되는 과정을 확인할 수 있습니다.
 
 <br><br>
