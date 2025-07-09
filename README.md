@@ -290,3 +290,19 @@ Monitoring Agent가 생성한 로그 요약이 실제 인터페이스에서 어�
 
 &nbsp; Figure 5는 BlackList 추가 기능이 정상적으로 동작하는지를 보여주는 예시입니다.
 API를 통해 특정 URL 또는 IP가 보안 위협으로 판단되어 차단 목록에 성공적으로 반영되는 과정을 확인할 수 있습니다.
+
+<br><br>
+
+## License
+
+<div align="center">
+  
+| Framework / Library                | License            | Notes                                                                               |
+| ---------------------------------- | ------------------ | ----------------------------------------------------------------------------------- |
+| **Spring Framework / Spring Boot** | Apache License 2.0 | [source](https://github.com/spring-projects/spring-framework/blob/main/LICENSE.txt) |
+| **LangChain**                      | MIT License        | [source](https://github.com/langchain-ai/langchain/blob/master/LICENSE)             |
+| **LangGraph**                      | MIT License        | [source](https://github.com/langchain-ai/langgraph/blob/main/LICENSE)               |
+| **FastAPI**                        | GNU General Public License        | [source](https://www.gnu.org/licenses/gpl-3.0.html)                   |
+
+</div>
+
