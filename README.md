@@ -243,16 +243,36 @@ uvicorn main:app --port 8001
 
 <div align="center">
   <img src="https://github.com/user-attachments/assets/3d73654d-9479-465d-8973-25984e9f836f" alt="gateway" width="1200px" />
-  <p style="text-align: center;"><em>Gateway가 악성 요청을 차단하는 과정 (프레임 배속)</em></p>
+  <p style="text-align: center;"><em>Figure2. Gateway가 악성 요청을 차단하는 과정 (프레임 배속)</em></p>
 </div>
 
 <br>
 
 &nbsp; Figure 2는 Gateway가 악성 요청을 실시간으로 차단하는 모습을 보여줍니다.  
 
-&nbsp; 간단한 XSS 공격은 LLM 자체에서 1차적으로 차단되며, 인코딩되어 우회된 RCE 등의 고도화된 공격은 `review` 상태로 전환되어 **ReAct Agent**에게 전달됩니다. 이후 ReAct Agent는 다양한 **디코딩 도구(예: base64, ASCII), split 도구**를 활용하여 입력을 분석하고 악성 여부를 판단합니다. 이러한 흐름은 LLM 보안 게이트웨이의 다단계 필터링 로직을 잘 보여주는 대표적인 예시입니다. (영상을 보여주기 위해 Stream으로 
+&nbsp; 간단한 XSS 공격은 LLM 자체에서 1차적으로 차단되며, 인코딩되어 우회된 RCE 등의 고도화된 공격은 `review` 상태로 전환되어 **ReAct Agent**에게 전달됩니다. 이후 ReAct Agent는 다양한 **디코딩 도구(예: base64, ASCII), split 도구**를 활용하여 입력을 분석하고 악성 여부를 판단합니다. 이러한 흐름은 LLM 보안 게이트웨이의 다단계 필터링 로직을 잘 보여주는 대표적인 예시입니다. (영상을 보여주기 위해 Stream으로 표현했습니다)
 
 <br>
+
+## 📊 공격 유형별 대응 성능 측정 결과
+
+| 공격 유형                          | Test Result                                                                 | Average Response Time (ms) | Standard Deviation (ms) |
+|-----------------------------------|------------------------------------------------------------------------------|-----------------------------|--------------------------|
+| XSS Attack                        | 1차 LLM 차단                                                               | 776.867                     | 223.34                   |
+| Malformed Header Injection        | 1차 LLM 차단                                                               | 780.333                     | 288.431                  |
+| SQL Injection                     | 1차 LLM 차단                                                               | 703.936                     | 270.852                  |
+| SSFR (Server-Side Request Forgery)| 1차 LLM 차단                                                               | 642.196                     | 269.559                  |
+| Command Injection                 | 1차 LLM 차단<br>(간헐적 Agent 호출)                                        | 625.181                     | 179.5                    |
+| Stealthy XSS                      | 1차 LLM 차단                                                               | 826.867                     | 305.981                  |
+| RCE via Shell Injection           | Agent 호출<br>(LLM 단독 차단 불가 → Base64/Unicode/ASCII decode & inference tool 호출) | 5270.7                      | 1029.1                   |
+| Few-shot 기반 RCE                | Few-shot 내재화된 상태에서<br>LLM 단독 차단 성공 (Tool 호출 없이)         | 1982                        | 282.4                    |
+
+<br>
+> 위 표는 각 공격 유형에 대한 차단 결과와 평균 응답 시간을 요약한 것입니다.  
+> 모든 실험은 첫 `Cold Start`를 제외한 **15회 반복 측정**을 통해 수행되었으며, **표준편차(Standard Deviation)** 는 응답 시간의 변동성을 나타냅니다.
+
+<br><br><br>
+
 
 <div align="center">
   <img src="https://github.com/user-attachments/assets/b11f0aeb-0c86-432e-a411-30a0573d411b" alt="Image" width="1200px" />
