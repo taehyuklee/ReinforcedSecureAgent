@@ -269,7 +269,7 @@ uvicorn main:app --port 8001
 <br>
 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/2a2724e9-6313-4c90-91c8-4d00b8d16527" alt="Image" width="1200px" />
+  <img src="https://github.com/user-attachments/assets/2a2724e9-6313-4c90-91c8-4d00b8d16527" alt="Summary_log" width="1200px" />
   <p style="text-align: center;"><em>Figure 4. summary_log.txt를 UI에 표기하는 컨셉</em></p>
 </div>
 
@@ -277,3 +277,16 @@ uvicorn main:app --port 8001
 
 &nbsp; Figure 4에서는 summary_log.txt의 일부 내용을 발췌하여, 해당 요약 정보가 monitor.html UI에 정확히 시각화되고 있는지를 보여줍니다.
 Monitoring Agent가 생성한 로그 요약이 실제 인터페이스에서 어떻게 반영되는지를 컨셉을 확인 할 수 있습니다.
+
+<br>
+
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/e33f3924-fc17-4a93-b6d1-1ff98c2d2ed5" alt="Blacklist" width="1200px" />
+  <img src="https://github.com/user-attachments/assets/5e8a4d55-58ea-48cf-afed-43a73b22166a" alt="img" width="1200px">
+  <p style="text-align: center;"><em>igure 5. BlackList 추가 기능 동작 예시</em></p>
+</div>
+
+<br>
+
+&nbsp; Figure 5는 BlackList 추가 기능이 정상적으로 동작하는지를 보여주는 예시입니다.
+API를 통해 특정 URL 또는 IP가 보안 위협으로 판단되어 차단 목록에 성공적으로 반영되는 과정을 확인할 수 있습니다.
