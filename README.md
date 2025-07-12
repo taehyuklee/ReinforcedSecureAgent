@@ -56,6 +56,18 @@
 
 <br>
 
+<br>
+
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/61a163c4-4aee-476f-ba4f-2e7d01928ce1" alt="Image" width="800px" />
+  <p style="text-align: center;"><em>Figure 1.1. Security Gateway Structure </em></p>
+</div>
+
+<br>
+
+Security Gateway는 신속한 처리 속도를 보장하기 위해, 먼저 XSS, SQL Injection과 같은 잘 알려진 공격 유형을 LLM이 1차로 빠르게 판단하여 차단 또는 허용 결정을 내립니다. 만약 우회 공격 등으로 판단이 어려운 경우에는 해당 요청을 ReAct Agent Graph의 리뷰 프로세스로 전달하여, 디코딩 툴 등 다양한 도구를 활용해 상세 분석을 진행한 후 최종적으로 허용 또는 차단 여부를 결정하는 구조입니다.
+
+<br><br>
 해당 레포지토리에는 총 3개의 패키지가 포함되어 있습니다:
 
 ``` text
